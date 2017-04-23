@@ -1,0 +1,11 @@
+@import '~bootstrap/scss/bootstrap';
+
+[role=button]{
+  cursor: pointer;
+}
+
+@include media-breakpoint-down(sm) {
+  html {
+    font-size: 14px;
+  }
+}
