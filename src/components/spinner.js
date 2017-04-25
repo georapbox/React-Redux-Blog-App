@@ -1,5 +1,4 @@
 import '../styles/spinner.scss';
-import '../styles/search_bar.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 
