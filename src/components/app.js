@@ -18,6 +18,12 @@ class App extends Component {
               <li>
                 <Link to={'/about'}>About</Link>
               </li>
+              <li>
+                <Link to={'/about/greet'}>Greeting</Link>
+              </li>
+              <li>
+                <Link to={'/about/greet2'}>Greeting 2</Link>
+              </li>
             </ul>
           </div>
         </div>
