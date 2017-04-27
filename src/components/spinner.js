@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 
 const Spinner = props => {
   return (
-    <div className={`sk-fading-circle ${props.customClass} ${!props.visible ? 'd-none' : ''}`}>
+    <div
+      className={`sk-fading-circle ${props.customClass} ${!props.visible ? 'd-none' : ''}`}
+      style={{width: props.width, height: props.height}}>
       <div className="sk-circle1 sk-circle"></div>
       <div className="sk-circle2 sk-circle"></div>
       <div className="sk-circle3 sk-circle"></div>
@@ -23,12 +25,16 @@ const Spinner = props => {
 
 Spinner.defaultProps = {
   customClass: '',
-  visible: false
+  visible: false,
+  width: '40px',
+  height: '40px'
 };
 
 Spinner.propTypes = {
   customClass: PropTypes.string,
-  visible: PropTypes.bool
+  visible: PropTypes.bool,
+  width: PropTypes.string,
+  height: PropTypes.string
 };
 
 export default Spinner;
