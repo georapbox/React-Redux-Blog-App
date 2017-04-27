@@ -2,10 +2,36 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Field, reduxForm} from 'redux-form';
 import {Link} from 'react-router-dom';
+import {connect} from 'react-redux';
+import {createPost} from '../actions';
+import Alert from '../components/alert';
+import Spinner from '../components/spinner';
 
 class PostsNew extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      error: false,
+      isSending: false
+    };
+  }
+
   onFormSubmit(values) {
-    console.log(values);
+    this.setState({isSending: true});
+
+    this.props
+      .createPost(values)
+      .then(response => {
+        if (response.error) {
+          this.setState({error: true, isSending: false});
+          console.error(response.payload);
+          return response;
+        }
+
+        this.setState({error: false, isSending: false});
+        this.props.history.push('/');
+      });
   }
 
   renderField(field) {
@@ -24,8 +50,13 @@ class PostsNew extends Component {
     );
   }
 
+  onHideError() {
+    this.setState({error: false});
+  }
+
   render() {
     const {handleSubmit} = this.props;
+    const {isSending} = this.state;
 
     return (
       <form onSubmit={handleSubmit(this.onFormSubmit.bind(this))}>
@@ -33,14 +64,32 @@ class PostsNew extends Component {
         <Field name="categories" label="Categories" component={this.renderField} />
         <Field name="content" label="Post Content" component={this.renderField} />
         <Link to="/" className="btn btn-danger mr-1">Cancel</Link>
-        <button type="submit" className="btn btn-primary">Submit</button>
+
+        <button type="submit" className={`btn btn-primary ${isSending ? 'd-none' : ''}`}>Submit</button>
+
+        <span className={!isSending ? 'd-none' : ''}>
+          <Spinner
+            visible={true}
+            customClass="d-inline-block ml-2 mr-2"
+            width="20px" height="20px" />
+          Please wait...
+        </span>
+
+        <Alert
+          type="danger"
+          message="Ooooops!!! Something went terribly wrong!"
+          visible={this.state.error}
+          customClass="mt-3"
+          onHideError={this.onHideError.bind(this)} />
       </form>
     );
   }
 }
 
 PostsNew.propTypes = {
-  handleSubmit: PropTypes.func
+  handleSubmit: PropTypes.func,
+  createPost: PropTypes.func,
+  history: PropTypes.object
 };
 
 function validate(values) {
@@ -67,4 +116,6 @@ function validate(values) {
 export default reduxForm({
   validate,
   form: 'PostsNewForm'
-})(PostsNew);
+})(
+  connect(null, {createPost})(PostsNew)
+);
