@@ -1,16 +1,10 @@
+import {mapKeys} from 'lodash';
 import {FETCH_POSTS} from '../actions';
 
-const INITIAL_STATE = {
-  all: [],
-  post: null
-};
-
-const PostsReducer = (state = INITIAL_STATE, action) => {
+const PostsReducer = (state = {}, action) => {
   switch (action.type) {
     case FETCH_POSTS:
-      return action.payload.data
-        ? Object.assign({}, state, {all: action.payload.data})
-        : state;
+      return action.payload.data ? mapKeys(action.payload.data, 'id') : state;
     default:
       return state;
   }
