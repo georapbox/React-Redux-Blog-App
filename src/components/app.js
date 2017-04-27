@@ -12,7 +12,11 @@ class App extends Component {
           </div>
         </div>
 
-        {routes}
+        <div className="row">
+          <div className="col-lg-12">
+            {routes}
+          </div>
+        </div>
       </div>
     );
   }
