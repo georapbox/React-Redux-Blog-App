@@ -13,6 +13,7 @@ class PostsNew extends Component {
             className="form-control" id="post_title"
             {...field.input}
           />
+          <span className="text-danger">{field.meta.error}</span>
         </div>
       </div>
     );
@@ -30,7 +31,24 @@ class PostsNew extends Component {
 }
 
 function validate(values) {
-  console.log(values);
+  const errors = {};
+  const {title, categories, content} = values;
+
+  if (!title) {
+    errors.title = 'Title is a required field';
+  }
+
+  if (!categories) {
+    errors.categories = 'Categories is a required field';
+  }
+
+  if (!content) {
+    errors.content = 'Content is a required field';
+  }
+
+  // If errors is empty object, the form is fine to submit.
+  // If errors has *any* properties, redux-form assumes form is invalid.
+  return errors;
 }
 
 export default reduxForm({
