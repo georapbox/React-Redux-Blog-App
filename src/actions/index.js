@@ -9,37 +9,33 @@ const ROOT_URL = 'http://reduxblog.herokuapp.com/api';
 const API_KEY = '?key=georapbox';
 
 export const fetchPosts = () => {
-  const request = axios.get(`${ROOT_URL}/posts${API_KEY}`);
-
-  return {
-    type: FETCH_POSTS,
-    payload: request
+  return dispatch => {
+    return axios.get(`${ROOT_URL}/posts${API_KEY}`)
+      .then(res => dispatch({type: FETCH_POSTS, payload: res, error: false}))
+      .catch(err => dispatch({type: FETCH_POSTS, payload: err, error: true}));
   };
 };
 
 export const createPost = values => {
-  const request = axios.post(`${ROOT_URL}/posts${API_KEY}`, values);
-
-  return {
-    type: CREATE_POST,
-    payload: request
+  return dispatch => {
+    return axios.post(`${ROOT_URL}/posts${API_KEY}`, values)
+      .then(res => dispatch({type: CREATE_POST, payload: res, error: false}))
+      .catch(err => dispatch({type: CREATE_POST, payload: err, error: true}));
   };
 };
 
 export const fetchPost = id => {
-  const request = axios.get(`${ROOT_URL}/posts/${id}${API_KEY}`);
-
-  return {
-    type: FETCH_POST,
-    payload: request
+  return dispatch => {
+    return axios.get(`${ROOT_URL}/posts/${id}${API_KEY}`)
+      .then(res => dispatch({type: FETCH_POST, payload: res, error: false}))
+      .catch(err => dispatch({type: FETCH_POST, payload: err, error: true}));
   };
 };
 
 export const deletePost = id => {
-  const request = axios.delete(`${ROOT_URL}/posts/${id}${API_KEY}`);
-
-  return {
-    type: DELETE_POST,
-    payload: request
+  return dispatch => {
+    return axios.delete(`${ROOT_URL}/posts/${id}${API_KEY}`)
+      .then(res => dispatch({type: DELETE_POST, payload: res, error: false}))
+      .catch(err => dispatch({type: DELETE_POST, payload: err, error: true}));
   };
 };
