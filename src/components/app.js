@@ -13,7 +13,7 @@ class App extends Component {
         </div>
 
         <div className="row">
-          <div className="col-lg-12">
+          <div className="col-md-8 offset-md-2">
             {routes}
           </div>
         </div>

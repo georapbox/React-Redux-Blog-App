@@ -90,7 +90,7 @@ class PostsShow extends Component {
         </div>
 
         <h3>{post.title}</h3>
-        <h6>Categories: {post.categories}</h6>
+        <h6 className="mb-3">Categories: {post.categories}</h6>
         <p>{post.content}</p>
 
         <Alert
