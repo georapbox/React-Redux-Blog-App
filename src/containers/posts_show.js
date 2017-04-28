@@ -3,15 +3,32 @@ import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {fetchPost, deletePost} from '../actions';
+import Alert from '../components/alert';
 
 class PostsShow extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      fetchError: false,
+      deleteError: false
+    };
+  }
+
   componentDidMount() {
     if (this.props.post) {
       return;
     }
 
     const {id} = this.props.match.params;
-    this.props.fetchPost(id);
+
+    this.props.fetchPost(id)
+      .then(response => {
+        if (response.error) {
+          this.setState({fetchError: true});
+          return response;
+        }
+      });
   }
 
   onDeleteClick() {
@@ -22,18 +39,37 @@ class PostsShow extends Component {
       .then(response => {
         if (response.error) {
           console.error(response.payload);
+          this.setState({deleteError: true});
           return response;
         }
 
+        this.setState({deleteError: false});
         this.props.history.push('/');
       });
+  }
+
+  onHideError() {
+    this.setState({fetchError: false, deleteError: false});
   }
 
   render() {
     const {post} = this.props;
 
     if (!post) {
-      return <div>Loading...</div>;
+      return (
+        <div>
+          <span className={`${this.state.fetchError ? 'd-none' : ''}`}>
+            Loading...
+          </span>
+
+          <Alert
+            type="danger"
+            message="Could not fetch post!"
+            visible={this.state.fetchError}
+            customClass="mt-3"
+            showCloseButton={false}/>
+        </div>
+      );
     }
 
     return (
@@ -56,6 +92,13 @@ class PostsShow extends Component {
         <h3>{post.title}</h3>
         <h6>Categories: {post.categories}</h6>
         <p>{post.content}</p>
+
+        <Alert
+          type="danger"
+          message="Could not delete post!"
+          visible={this.state.deleteError}
+          customClass="mt-3"
+          onHideError={this.onHideError.bind(this)} />
       </div>
     );
   }
