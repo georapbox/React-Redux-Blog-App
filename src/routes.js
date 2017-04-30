@@ -10,6 +10,6 @@ export default
     <Route path="/posts/new" component={PostsNew} />
     <Route path="/posts/:id" component={PostsShow} />
     <Route path='/404' component={PageNotfound} />
-    <Route exact path="/" component={PostsIndex} />
+    <Route path="/" component={PostsIndex} />
     <Redirect from='*' to='/404' />
   </Switch>;
