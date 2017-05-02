@@ -1,3 +1,4 @@
+const path = require('path');
 const devEnv = process.env.NODE_ENV === 'development';
 const prdEnv = process.env.NODE_ENV === 'production';
 const webpack = require('webpack');
@@ -31,7 +32,7 @@ module.exports = {
     './src/index.js'
   ],
   output: {
-    path: `${__dirname}/dist`,
+    path: path.resolve(__dirname, 'dist'),
     publicPath: devEnv ? '/' : './',
     filename: `${outputFile}.js`
   },
