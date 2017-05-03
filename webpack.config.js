@@ -4,8 +4,11 @@ const prdEnv = process.env.NODE_ENV === 'production';
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
-const outputFile = `[name].bundle${prdEnv ? '.min' : ''}`;
+const outputFile = `[name].[chunkhash]${prdEnv ? '.min' : ''}`;
+const vendors = [
+  'axios', 'lodash', 'prop-types', 'react', 'react-dom',
+  'react-redux', 'react-router-dom', 'redux', 'redux-form', 'redux-thunk'
+];
 
 const extractSass = new ExtractTextPlugin({
   filename: `${outputFile}.css`,
@@ -17,20 +20,31 @@ const htmlWebpack = new HtmlWebpackPlugin({
   template: 'src/index.html'
 });
 
+const vendorChunks = new webpack.optimize.CommonsChunkPlugin({
+  names: ['vendor', 'manifest']
+});
+
+const uglifyJS = new webpack.optimize.UglifyJsPlugin({
+  minimize: true,
+  sourceMap: true
+});
+
 const plugins = [
   extractSass,
-  htmlWebpack
+  htmlWebpack,
+  vendorChunks
 ];
 
 if (!devEnv) {
-  plugins.push(new UglifyJsPlugin({minimize: true, sourceMap: true}));
+  plugins.push(uglifyJS);
 }
 
 module.exports = {
   devtool: 'source-map',
-  entry: [
-    './src/index.js'
-  ],
+  entry: {
+    bundle: './src/index.js',
+    vendor: vendors
+  },
   output: {
     path: path.join(__dirname, 'dist'),
     publicPath: devEnv ? '/' : './',
